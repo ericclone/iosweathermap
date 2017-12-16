@@ -28,7 +28,7 @@ class Weather: NSObject, NSCoding {
     // MARK: Archiving Paths
     
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("meals")
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("cities")
     
     // MARK: Types
     
@@ -38,51 +38,40 @@ class Weather: NSObject, NSCoding {
         static let low = "low"
         static let main = "main"
         static let icon = "icon"
-        static let timeComponents = "timeComponents"
+        static let timeComponents = "timecomponents"
     }
     
     // MARK: Initialization
     
-    init?(name: String, photo: UIImage?, rating: Int) {
-        // The name must not be empty
-        guard !name.isEmpty else {
-            return nil
-        }
-        
-        // The rating must be between 0 and 5 inclusively
-        guard (rating >= 0) && (rating <= 5) else {
-            return nil
-        }
-        
-        // Initialize stored properties.
-        self.name = name
-        self.photo = photo
-        self.rating = rating
-        
+    init?(temp: Double, high: Double, low: Double, main: String, icon: String, timeComponents: [String]) {
+        self.temp = temp
+        self.high = high
+        self.low = low
+        self.main = main
+        self.icon = icon
+        self.timeComponents = timeComponents
     }
     
     // MARK: NSCoding
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: PropertyKey.name)
-        aCoder.encode(photo, forKey: PropertyKey.photo)
-        aCoder.encode(rating, forKey: PropertyKey.rating)
+        aCoder.encode(temp, forKey: PropertyKey.temp)
+        aCoder.encode(high, forKey: PropertyKey.high)
+        aCoder.encode(low, forKey: PropertyKey.low)
+        aCoder.encode(main, forKey: PropertyKey.main)
+        aCoder.encode(icon, forKey: PropertyKey.icon)
+        aCoder.encode(timeComponents, forKey: PropertyKey.timeComponents)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        // The name is required. If we cannot decode a name string the initializer should fail.
-        guard let name = aDecoder.decodeObject(forKey: PropertyKey.name) as? String else {
-            os_log("Unable to decode the name of a meal object.", log: OSLog.default, type: .debug)
-            return nil
-        }
+        let temp = aDecoder.decodeDouble(forKey: PropertyKey.temp)
+        let high = aDecoder.decodeDouble(forKey: PropertyKey.high)
+        let low = aDecoder.decodeDouble(forKey: PropertyKey.low)
+        let main = aDecoder.decodeObject(forKey: PropertyKey.main) as! String
+        let icon = aDecoder.decodeObject(forKey: PropertyKey.icon) as! String
+        let timeComponents = aDecoder.decodeObject(forKey: PropertyKey.timeComponents) as! [String]
         
-        // Because photo is an optional property of Meal, just use conditional cast.
-        let photo = aDecoder.decodeObject(forKey: PropertyKey.photo) as? UIImage
-        
-        let rating = aDecoder.decodeInteger(forKey: PropertyKey.rating)
-        
-        // Must call designated initializer.
-        self.init(name: name, photo: photo, rating: rating)
+        self.init(temp: temp, high: high, low: low, main: main, icon: icon, timeComponents: timeComponents)
     }
     
 }
