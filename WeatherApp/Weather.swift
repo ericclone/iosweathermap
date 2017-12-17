@@ -18,12 +18,12 @@ import os.log
 class Weather: NSObject, NSCoding {
     // MARK: Properties
     
-    var temp: Double
-    var high: Double
-    var low: Double
-    var main: String
-    var icon: String
-    var timeComponents: [String]
+    var temp: Double = 0
+    var high: Double = 0
+    var low: Double = 0
+    var main: String = ""
+    var icon: String = ""
+    var timeComponents: [String] = []
     
     // MARK: Archiving Paths
     
@@ -42,6 +42,7 @@ class Weather: NSObject, NSCoding {
     }
     
     // MARK: Initialization
+    override init() {super.init()}
     
     init?(temp: Double, high: Double, low: Double, main: String, icon: String, timeComponents: [String]) {
         self.temp = temp

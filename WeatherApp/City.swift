@@ -7,15 +7,15 @@
 
 import Foundation
 
-class CityViewController: NSObject, NSCoding {
-    var name: String
-    var lat: Double
-    var lon: Double
+class City: NSObject, NSCoding {
+    var name: String = ""
+    var lat: Double = 0.0
+    var lon: Double = 0.0
     var current: Weather?
     var hourly: [Weather]?
     var daily: [Weather]?
-    var lastRealtime: TimeInterval
-    var lastForecast: TimeInterval
+    var lastRealtime: TimeInterval = 0.0
+    var lastForecast: TimeInterval = 0.0
     
     struct PropertyKey {
         static let name = "name"
@@ -29,6 +29,7 @@ class CityViewController: NSObject, NSCoding {
     }
     
     // MARK: Initialization
+    override init() {}
     
     init(name: String, lat: Double, lon: Double, current: Weather?, hourly: [Weather]?, daily: [Weather]?, lastRealTime: TimeInterval?, lastForecast: TimeInterval?) {
         self.name = name

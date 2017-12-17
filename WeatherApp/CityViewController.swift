@@ -8,7 +8,7 @@
 import UIKit
 import os.log
 
-class MealViewController: UIViewController, UITextFieldDelegate,
+class CityViewController: UIViewController, UITextFieldDelegate,
 UIImagePickerControllerDelegate , UINavigationControllerDelegate {
     
     // MARK: Properties

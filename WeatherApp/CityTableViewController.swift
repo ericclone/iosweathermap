@@ -8,12 +8,13 @@
 import UIKit
 import os.log
 
-class MealTableViewController: UITableViewController {
+class CityTableViewController: UITableViewController {
     
     // MARK: Properties
     
     var meals = [Meal]()
-
+    let cities = Model.shared.cities
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,13 +23,17 @@ class MealTableViewController: UITableViewController {
         
         
         // Load any saved meals, otherwise load sample data.
-        if let savedMeals = loadMeals(), savedMeals.count > 0 {
-            meals += savedMeals
-        }
-        else {
-            // Load the sample data
-            loadSampleMeals()
-        }
+//        if let savedMeals = loadMeals(), savedMeals.count > 0 {
+//            meals += savedMeals
+//        }
+//        else {
+//            // Load the sample data
+//            loadSampleMeals()
+//        }
+        Model.addCity(name: "San Jose", whenDone: tableView.reloadData)
+        Model.addCity(name: "San Francisco", whenDone: tableView.reloadData)
+        Model.addCity(name: "Beijing", whenDone: tableView.reloadData)
+//        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,25 +49,28 @@ class MealTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return meals.count
+        print("tableView try to get count", Model.shared.cities.count)
+        return Model.shared.cities.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Table view cells are reused and should be dequeued using a cell identifier.
         
-        let cellIdentifier = "MealTableViewCell"
+        let cellIdentifier = "CityTableViewCell"
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? MealTableViewCell else {
-            fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CityTableViewCell else {
+            fatalError("The dequeued cell is not an instance of CityTableViewCell.")
         }
         
         // Fetches the appropriate meal for the data source layout.
-        let meal = meals[indexPath.row]
+        let city = Model.shared.cities[indexPath.row]
         
-        cell.nameLabel.text = meal.name
-        cell.photoImageView.image = meal.photo
-        cell.ratingControl.rating = meal.rating
+        cell.nameLabel.text = city.name
+        if let current = city.current {
+        cell.iconImageView.image = UIImage(named: current.icon)
+        cell.tempLabel.text = "\(Model.temp(current.temp))"
+        }
 
         return cell
     }
@@ -78,7 +86,7 @@ class MealTableViewController: UITableViewController {
         if editingStyle == .delete {
             // Delete the row from the data source
             meals.remove(at: indexPath.row)
-            saveMeals()
+//            saveMeals()
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -111,11 +119,11 @@ class MealTableViewController: UITableViewController {
         case "AddItem":
             os_log("Adding a new meal.", log:OSLog.default, type: .debug)
         case "ShowDetail":
-            guard let mealDetailViewController = segue.destination as? MealViewController else {
+            guard let mealDetailViewController = segue.destination as? CityViewController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             
-            guard let selectedMealCell = sender as? MealTableViewCell else {
+            guard let selectedMealCell = sender as? CityTableViewCell else {
                 fatalError("Unexpected sender: \(sender ?? "nil - nil")")
             }
             
@@ -135,7 +143,7 @@ class MealTableViewController: UITableViewController {
     
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         
-        if let sourceViewController = sender.source as? MealViewController, let meal = sourceViewController.meal {
+        if let sourceViewController = sender.source as? CityViewController, let meal = sourceViewController.meal {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 meals[selectedIndexPath.row] = meal
                 tableView.reloadRows(at: [selectedIndexPath], with: .none)
@@ -149,7 +157,7 @@ class MealTableViewController: UITableViewController {
             }
             
             // Save the meals.
-            saveMeals()
+//            saveMeals()
         }
     }
     
@@ -175,17 +183,17 @@ class MealTableViewController: UITableViewController {
         meals += [meal1, meal2, meal3]
     }
     
-    private func saveMeals() {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
-        if isSuccessfulSave {
-            os_log("Meals successfully saved.", log: OSLog.default, type: .debug)
-        }
-        else {
-            os_log("Failed to save meals...", log: OSLog.default, type: .error)
-        }
-    }
-    
-    private func loadMeals() -> [Meal]? {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
-    }
+//    private func saveMeals() {
+//        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
+//        if isSuccessfulSave {
+//            os_log("Meals successfully saved.", log: OSLog.default, type: .debug)
+//        }
+//        else {
+//            os_log("Failed to save meals...", log: OSLog.default, type: .error)
+//        }
+//    }
+//
+//    private func loadMeals() -> [Meal]? {
+//        return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
+//    }
 }
