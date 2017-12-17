@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GooglePlaces
 import os.log
 
 class CityTableViewController: UITableViewController {
@@ -30,9 +31,9 @@ class CityTableViewController: UITableViewController {
 //            // Load the sample data
 //            loadSampleMeals()
 //        }
-        Model.addCity(name: "San Jose", whenDone: tableView.reloadData)
-        Model.addCity(name: "San Francisco", whenDone: tableView.reloadData)
-        Model.addCity(name: "Beijing", whenDone: tableView.reloadData)
+        Model.addCity(name: "San Jose", lat: 37.3382, lon: -121.8863, whenDone: tableView.reloadData)
+        Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: tableView.reloadData)
+        Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: tableView.reloadData)
 //        tableView.reloadData()
     }
 
@@ -68,8 +69,8 @@ class CityTableViewController: UITableViewController {
         
         cell.nameLabel.text = city.name
         if let current = city.current {
-        cell.iconImageView.image = UIImage(named: current.icon)
-        cell.tempLabel.text = "\(Model.temp(current.temp))"
+            cell.iconImageView.image = UIImage(named: current.icon)
+            cell.tempLabel.text = "\(Model.temp(current.temp))"
         }
 
         return cell
@@ -196,4 +197,39 @@ class CityTableViewController: UITableViewController {
 //    private func loadMeals() -> [Meal]? {
 //        return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
 //    }
+}
+
+
+//Google auto complete
+extension CityTableViewController: GMSAutocompleteViewControllerDelegate {
+    
+    // Handle the user's selection.
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        print("Place name: \(place.name)")
+        print("Place name: \(place.coordinate)")
+        dismiss(animated: true, completion: nil)
+        let name = place.name
+        let lat = place.coordinate.latitude
+        let lon = place.coordinate.longitude
+        Model.addCity(name: name, lat: lat, lon: lon, whenDone: tableView.reloadData)
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // User canceled the operation.
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
 }

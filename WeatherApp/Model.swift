@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 import os.log
 
 class Model {
@@ -18,35 +19,51 @@ class Model {
     
     
     static let shared = Model()
-    static var imperial: Bool = true {
+    static var metric: Bool = false {
         didSet {
-            print("old value", oldValue, "new Value", imperial)
+            UserDefaults.standard.set(metric, forKey: "metric")
         }
     }
     private init() {}
     var cities: [City] = [City]()
     
-    class func addCity(name: String, whenDone callback: @escaping () -> ()) -> Bool {
+    class func addCity(name: String, lat: Double, lon: Double, whenDone callback: @escaping () -> ()){
         let results = shared.cities.filter {$0.name == name}
         if !results.isEmpty {
-            return false
+            return
         }
         let city = City()
         city.name = name
+        city.lat = lat
+        city.lon = lon
+        print(lat, lon)
+        let index = shared.cities.count
         shared.cities.append(city)
         
-        if !updateWeather(cityIndex: shared.cities.count - 1, callback: callback) {
-            return false
-        }
-        if !updateForecast(city: city) {
-            return false
-        }
-        
-        print(shared.cities.count)
-        return true
+        updateTimeZone(cityIndex: index, callback: callback)
+        updateWeather(cityIndex: index, callback: callback)
+        updateForecast(cityIndex: index, callback: callback)
     }
     
-    class func updateWeather(cityIndex: Int, callback: @escaping () -> ()) -> Bool {
+    class func updateTimeZone(cityIndex: Int, callback: @escaping () -> ()) {
+        let city = shared.cities[cityIndex]
+        let location = CLLocation(latitude: city.lat, longitude: city.lon)
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+            if error == nil {
+                print("before ", location, cityIndex, city.name, city.lat, city.lon, placemarks?.count)
+                let firstLocation = placemarks?[0]
+                let timeZone = firstLocation?.timeZone
+                shared.cities[cityIndex].timeZone = timeZone
+                print("after ", location, cityIndex, city.name, city.lat, city.lon, timeZone)
+                DispatchQueue.main.async {
+                    callback()
+                }
+            }
+        })
+    }
+    
+    class func updateWeather(cityIndex: Int, force: Bool = false, callback: @escaping () -> ()){
         print("updating weather")
         let urlString = String(format:Model.weatherURL, shared.cities[cityIndex].name)
         let escapedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
@@ -74,7 +91,7 @@ class Model {
                     
                     let currentWeather = Weather(temp: temp, high: high, low: low, main: main, icon: icon, timeComponents: [])
                     print(currentWeather!)
-                    Model.shared.cities[cityIndex].current = currentWeather
+                    shared.cities[cityIndex].current = currentWeather
                     DispatchQueue.main.async {
                         callback()
                     }
@@ -88,11 +105,10 @@ class Model {
             print(errorMsg)
         }
         task.resume()
-        return true
     }
     
-    class func updateForecast(city: City) -> Bool {
-        return true
+    class func updateForecast(cityIndex: Int, force: Bool = false, callback: @escaping () -> ()) {
+        
     }
     
     func updateAll() {
@@ -117,10 +133,10 @@ class Model {
     }
     
     class func temp(_ kelvin: Double) -> Int {
-        if imperial {
-            return Int((kelvin - 273.15) * 1.8 + 32)
-        } else {
+        if metric {
             return Int(kelvin - 273.15)
+        } else {
+            return Int((kelvin - 273.15) * 1.8 + 32)
         }
     }
 }

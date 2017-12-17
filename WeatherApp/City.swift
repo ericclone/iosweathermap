@@ -11,6 +11,7 @@ class City: NSObject, NSCoding {
     var name: String = ""
     var lat: Double = 0.0
     var lon: Double = 0.0
+    var timeZone: TimeZone?
     var current: Weather?
     var hourly: [Weather]?
     var daily: [Weather]?

@@ -19,6 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         GMSPlacesClient.provideAPIKey("AIzaSyB8WIyDQH65iu1tEHISaDV56Gn2USsnRdU")
         GMSServices.provideAPIKey("AIzaSyB8WIyDQH65iu1tEHISaDV56Gn2USsnRdU")
+        
+        if let metric = UserDefaults.standard.object(forKey: "metric") {
+            print("found ", metric)
+            Model.metric = metric as! Bool
+        }
         return true
     }
 
