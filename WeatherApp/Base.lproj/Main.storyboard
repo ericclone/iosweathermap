@@ -79,7 +79,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="Sdc-qh-PYY">
                                 <connections>
-                                    <segue destination="uDc-bA-S1a" kind="presentation" identifier="AddItem" id="nTN-jp-wGo"/>
+                                    <action selector="addCity:" destination="cdU-ME-59s" id="B4C-Gm-dhI"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Settings" id="YCu-f0-aNZ"/>

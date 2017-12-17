@@ -21,16 +21,7 @@ class CityTableViewController: UITableViewController {
 
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
-        
-        
-        // Load any saved meals, otherwise load sample data.
-//        if let savedMeals = loadMeals(), savedMeals.count > 0 {
-//            meals += savedMeals
-//        }
-//        else {
-//            // Load the sample data
-//            loadSampleMeals()
-//        }
+
         Model.addCity(name: "San Jose", lat: 37.3382, lon: -121.8863, whenDone: tableView.reloadData)
         Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: tableView.reloadData)
         Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: tableView.reloadData)
@@ -68,6 +59,9 @@ class CityTableViewController: UITableViewController {
         let city = Model.shared.cities[indexPath.row]
         
         cell.nameLabel.text = city.name
+        if let timeZone = city.timeZone {
+            cell.nameLabel.text = "\(timeZone)" + city.name
+        }
         if let current = city.current {
             cell.iconImageView.image = UIImage(named: current.icon)
             cell.tempLabel.text = "\(Model.temp(current.temp))"
@@ -86,7 +80,7 @@ class CityTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            meals.remove(at: indexPath.row)
+            Model.shared.cities.remove(at: indexPath.row)
 //            saveMeals()
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -141,6 +135,13 @@ class CityTableViewController: UITableViewController {
 
 
     // MARK: Actions
+    @IBAction func addCity(_ sender: UIBarButtonItem) {
+        let autocompleteController = GMSAutocompleteViewController()
+        autocompleteController.autocompleteFilter = GMSAutocompleteFilter()
+        autocompleteController.autocompleteFilter?.type = .city
+        autocompleteController.delegate = self
+        present(autocompleteController, animated: true, completion: nil)
+    }
     
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         
@@ -208,7 +209,7 @@ extension CityTableViewController: GMSAutocompleteViewControllerDelegate {
         print("Place name: \(place.name)")
         print("Place name: \(place.coordinate)")
         dismiss(animated: true, completion: nil)
-        let name = place.name
+        let name = place.name.replacingOccurrences(of: "\'", with: "")
         let lat = place.coordinate.latitude
         let lon = place.coordinate.longitude
         Model.addCity(name: name, lat: lat, lon: lon, whenDone: tableView.reloadData)

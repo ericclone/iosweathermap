@@ -18,10 +18,11 @@ class City: NSObject, NSCoding {
     var lastRealtime: TimeInterval = 0.0
     var lastForecast: TimeInterval = 0.0
     
-    struct PropertyKey {
+    struct Key {
         static let name = "name"
         static let lat = "lat"
         static let lon = "lon"
+        static let timeZone = "timezone"
         static let current = "current"
         static let hourly = "hourly"
         static let daily = "daily"
@@ -32,10 +33,11 @@ class City: NSObject, NSCoding {
     // MARK: Initialization
     override init() {}
     
-    init(name: String, lat: Double, lon: Double, current: Weather?, hourly: [Weather]?, daily: [Weather]?, lastRealTime: TimeInterval?, lastForecast: TimeInterval?) {
+    init(name: String, lat: Double, lon: Double, timeZone: TimeZone?, current: Weather?, hourly: [Weather]?, daily: [Weather]?, lastRealTime: TimeInterval?, lastForecast: TimeInterval?) {
         self.name = name
         self.lat = lat
         self.lon = lon
+        self.timeZone = timeZone
         self.current = current
         self.hourly = hourly
         self.daily = daily
@@ -43,26 +45,28 @@ class City: NSObject, NSCoding {
         self.lastForecast = lastForecast ?? 0
     }
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: PropertyKey.name)
-        aCoder.encode(lat, forKey: PropertyKey.lat)
-        aCoder.encode(lon, forKey: PropertyKey.lon)
-        aCoder.encode(current, forKey: PropertyKey.current)
-        aCoder.encode(hourly, forKey: PropertyKey.hourly)
-        aCoder.encode(daily, forKey: PropertyKey.daily)
-        aCoder.encode(lastRealtime, forKey: PropertyKey.lastRealTime)
-        aCoder.encode(lastForecast, forKey: PropertyKey.lastForecast)
+        aCoder.encode(name, forKey: Key.name)
+        aCoder.encode(lat, forKey: Key.lat)
+        aCoder.encode(lon, forKey: Key.lon)
+        aCoder.encode(timeZone, forKey: Key.timeZone)
+        aCoder.encode(current, forKey: Key.current)
+        aCoder.encode(hourly, forKey: Key.hourly)
+        aCoder.encode(daily, forKey: Key.daily)
+        aCoder.encode(lastRealtime, forKey: Key.lastRealTime)
+        aCoder.encode(lastForecast, forKey: Key.lastForecast)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let name = aDecoder.decodeObject(forKey: PropertyKey.name) as? String
-        let lat = aDecoder.decodeDouble(forKey: PropertyKey.lat)
-        let lon = aDecoder.decodeDouble(forKey: PropertyKey.lon)
-        let current = aDecoder.decodeObject(forKey: PropertyKey.current) as? Weather
-        let hourly = aDecoder.decodeObject(forKey: PropertyKey.hourly) as? [Weather]
-        let daily = aDecoder.decodeObject(forKey: PropertyKey.daily) as? [Weather]
-        let lastRealTime = aDecoder.decodeObject(forKey: PropertyKey.lastRealTime) as? TimeInterval
-        let lastForecast = aDecoder.decodeObject(forKey: PropertyKey.lastForecast) as? TimeInterval
-        self.init(name: name!, lat: lat, lon: lon, current: current, hourly: hourly, daily: daily, lastRealTime: lastRealTime, lastForecast: lastForecast)
+        let name = aDecoder.decodeObject(forKey: Key.name) as? String
+        let lat = aDecoder.decodeDouble(forKey: Key.lat)
+        let lon = aDecoder.decodeDouble(forKey: Key.lon)
+        let timeZone = aDecoder.decodeObject(forKey: Key.timeZone) as? TimeZone
+        let current = aDecoder.decodeObject(forKey: Key.current) as? Weather
+        let hourly = aDecoder.decodeObject(forKey: Key.hourly) as? [Weather]
+        let daily = aDecoder.decodeObject(forKey: Key.daily) as? [Weather]
+        let lastRealTime = aDecoder.decodeObject(forKey: Key.lastRealTime) as? TimeInterval
+        let lastForecast = aDecoder.decodeObject(forKey: Key.lastForecast) as? TimeInterval
+        self.init(name: name!, lat: lat, lon: lon, timeZone: timeZone, current: current, hourly: hourly, daily: daily, lastRealTime: lastRealTime, lastForecast: lastForecast)
         
     }
     

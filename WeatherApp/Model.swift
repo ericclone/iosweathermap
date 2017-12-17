@@ -47,6 +47,9 @@ class Model {
     
     class func updateTimeZone(cityIndex: Int, callback: @escaping () -> ()) {
         let city = shared.cities[cityIndex]
+        if city.timeZone != nil {
+            return
+        }
         let location = CLLocation(latitude: city.lat, longitude: city.lon)
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
