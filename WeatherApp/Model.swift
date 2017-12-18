@@ -33,9 +33,12 @@ class Model {
     
     private init() {}
     
-    class func addCity(name: String, lat: Double, lon: Double, whenDone callback: @escaping () -> ()){
+    class func addCity(name: String, lat: Double, lon: Double, whenDone callback: @escaping (Bool, String) -> ()){
         let results = shared.cities.filter {$0.name == name}
         if !results.isEmpty {
+            DispatchQueue.main.async {
+                callback(false, "City already exists")
+            }
             return
         }
         let city = City()
@@ -51,7 +54,10 @@ class Model {
         updateForecast(cityIndex: index, callback: callback)
     }
     
-    class func updateTimeZone(cityIndex: Int, callback: @escaping () -> ()) {
+    class func updateTimeZone(cityIndex: Int, callback: @escaping (Bool, String) -> ()) {
+        if cityIndex >= shared.cities.count {
+            return
+        }
         let city = shared.cities[cityIndex]
         if city.timeZone != nil {
             return
@@ -67,15 +73,21 @@ class Model {
                 shared.cities[cityIndex].timeZone = timeZone
                 print("after ", location, cityIndex, city.name, city.lat, city.lon, timeZone)
                 DispatchQueue.main.async {
-                    callback()
+                    callback(true, "")
                 }
             }
         })
     }
     
-    class func updateWeather(cityIndex: Int, force: Bool = false, callback: @escaping () -> ()){
+    class func updateWeather(cityIndex: Int, force: Bool = false, callback: @escaping (Bool, String) -> ()){
+        if cityIndex >= shared.cities.count {
+            return
+        }
         print("updating weather")
-        let urlString = String(format:Model.weatherURL, shared.cities[cityIndex].name)
+        let cityName = shared.cities[cityIndex].name
+        let escapedName = cityName.replacingOccurrences(of: "\'", with: "")
+
+        let urlString = String(format:Model.weatherURL, escapedName)
         let escapedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
         let url = URL(string: escapedUrlString!)
         var errorMsg = ""
@@ -88,6 +100,19 @@ class Model {
             } else {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                    guard let statusCode = json!["cod"] as? Int, statusCode == 200 else {
+                        let statusCode = Int(json!["cod"] as! String)
+                        print("removing city \(cityName)")
+                        shared.cities = shared.cities.filter {$0.name != cityName}
+                        for oneCity in shared.cities {
+                            print("left: \(oneCity.name)")
+                        }
+                        DispatchQueue.main.async {
+                            callback(false, "OpenWeatherMap returned \(statusCode!): \(json!["message"] as! String)")
+                        }
+                        return
+                    }
+                    
                     
                     let weatherList = json!["weather"] as? [[String: Any]]
                     let weather = weatherList![0]
@@ -105,10 +130,9 @@ class Model {
                     shared.cities[cityIndex].current = currentWeather
                     shared.cities[cityIndex].lastRealtime = Date().timeIntervalSince1970
                     DispatchQueue.main.async {
-                        callback()
+                        callback(true, "")
                     }
                 } catch let error as Error {
-                    print(error)
                     errorMsg = error.localizedDescription
                 }
             }
@@ -119,11 +143,13 @@ class Model {
         task.resume()
     }
     
-    class func updateForecast(cityIndex: Int, force: Bool = false, callback: @escaping () -> ()) {
-        
+    class func updateForecast(cityIndex: Int, force: Bool = false, callback: @escaping (Bool, String) -> ()) {
+        if (cityIndex >= shared.cities.count) {
+            return
+        }
     }
     
-    class func updateLocation(_ location: CLLocation, completion callback: @escaping () -> ()) {
+    class func updateLocation(_ location: CLLocation, completion callback: @escaping (Bool, String) -> ()) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
             if error == nil {
@@ -132,7 +158,7 @@ class Model {
                     Model.cityName = cityName
                 }
                 DispatchQueue.main.async {
-                    callback()
+                    callback(true, "")
                 }
             }
         })

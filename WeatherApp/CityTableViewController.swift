@@ -22,9 +22,9 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
 
-        Model.addCity(name: "San Jose", lat: 37.3382, lon: -121.8863, whenDone: tableView.reloadData)
-        Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: tableView.reloadData)
-        Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: tableView.reloadData)
+        Model.addCity(name: "San Jose", lat: 37.3382, lon: -121.8863, whenDone: handleResult)
+        Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: handleResult)
+        Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: handleResult)
 //        tableView.reloadData()
         
         manager.delegate = self
@@ -38,6 +38,17 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: Handle result
+    
+    func handleResult(_ success: Bool, _ message: String = "") {
+        tableView.reloadData()
+        if !success {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -67,8 +78,10 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         if Model.cityName == city.name {
             cell.backgroundColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 0.8)
             cityName += " - Current Location"
-        } else {
+        } else if indexPath.row % 2 == 0{
             cell.backgroundColor = UIColor.white
+        } else {
+            cell.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         }
         if let timeZone = city.timeZone {
             cityName = "\(timeZone)" + cityName
@@ -154,7 +167,12 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         autocompleteController.delegate = self
         present(autocompleteController, animated: true, completion: nil)
     }
-    
+
+    @IBAction func switchUnit(_ sender: UIBarButtonItem) {
+        Model.metric = !Model.metric
+        sender.title = Model.metric ? "℃" : "℉"
+        tableView.reloadData()
+    }
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         
         if let sourceViewController = sender.source as? CityViewController, let meal = sourceViewController.meal {
@@ -178,7 +196,7 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
     // MARK: LocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
-        Model.updateLocation(location, completion: tableView.reloadData)
+        Model.updateLocation(location, completion: handleResult)
         
     }
     
@@ -228,10 +246,10 @@ extension CityTableViewController: GMSAutocompleteViewControllerDelegate {
         print("Place name: \(place.name)")
         print("Place name: \(place.coordinate)")
         dismiss(animated: true, completion: nil)
-        let name = place.name.replacingOccurrences(of: "\'", with: "")
+        let name = place.name
         let lat = place.coordinate.latitude
         let lon = place.coordinate.longitude
-        Model.addCity(name: name, lat: lat, lon: lon, whenDone: tableView.reloadData)
+        Model.addCity(name: name, lat: lat, lon: lon, whenDone: handleResult)
     }
     
     func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {

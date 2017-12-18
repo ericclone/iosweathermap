@@ -37,14 +37,14 @@
                                                 <constraint firstAttribute="height" constant="80" id="yTj-WY-qlX"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Temp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-3C-2Fv">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="55" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-3C-2Fv">
                                             <rect key="frame" x="316.5" y="37" width="42.5" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CityName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iK-Xr-KIl">
-                                            <rect key="frame" x="16" y="34" width="277" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CityName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iK-Xr-KIl">
+                                            <rect key="frame" x="16" y="34" width="84" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="277" id="Zsk-d4-XJJ"/>
                                             </constraints>
@@ -52,8 +52,15 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p2v-X6-dEi">
+                                            <rect key="frame" x="16" y="63" width="36" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="p2v-X6-dEi" firstAttribute="top" secondItem="7iK-Xr-KIl" secondAttribute="bottom" constant="8" id="FFm-bH-2zr"/>
                                         <constraint firstItem="Aga-j8-KNl" firstAttribute="centerY" secondItem="HAa-Ot-8Gi" secondAttribute="centerY" id="IYI-6E-XLd"/>
                                         <constraint firstItem="bpr-3C-2Fv" firstAttribute="trailing" secondItem="HAa-Ot-8Gi" secondAttribute="trailingMargin" id="Kuf-HS-Wg5"/>
                                         <constraint firstItem="bpr-3C-2Fv" firstAttribute="centerY" secondItem="HAa-Ot-8Gi" secondAttribute="centerY" id="Qy0-qa-jOW"/>
@@ -64,8 +71,9 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="iconImageView" destination="Aga-j8-KNl" id="7d4-kK-UL2"/>
-                                    <outlet property="nameLabel" destination="7iK-Xr-KIl" id="usJ-Ys-vrg"/>
+                                    <outlet property="nameLabel" destination="7iK-Xr-KIl" id="gVc-Qo-LSi"/>
                                     <outlet property="tempLabel" destination="bpr-3C-2Fv" id="nKz-vf-LAI"/>
+                                    <outlet property="timeLabel" destination="p2v-X6-dEi" id="yFt-f9-RiF"/>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="ShowDetail" id="cvd-x0-Fhg"/>
                                 </connections>
                             </tableViewCell>
@@ -82,13 +90,17 @@
                                     <action selector="addCity:" destination="cdU-ME-59s" id="B4C-Gm-dhI"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Settings" id="YCu-f0-aNZ"/>
+                            <barButtonItem title="℉" id="YCu-f0-aNZ">
+                                <connections>
+                                    <action selector="switchUnit:" destination="cdU-ME-59s" id="7qb-68-oCd"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ujg-Vn-8Zb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-468" y="134"/>
+            <point key="canvasLocation" x="-468" y="133.5832083958021"/>
         </scene>
         <!--New Meal-->
         <scene sceneID="tne-QT-ifu">
