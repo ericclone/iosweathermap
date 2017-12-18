@@ -21,6 +21,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="qBg-0G-kqI">
+                            <rect key="frame" x="0.0" y="118" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CityTableViewCell" rowHeight="90" id="RJH-Z4-Ybw" customClass="CityTableViewCell" customModule="WeatherApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="90"/>
@@ -37,7 +42,7 @@
                                                 <constraint firstAttribute="height" constant="80" id="yTj-WY-qlX"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="55" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-3C-2Fv">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-3C-2Fv">
                                             <rect key="frame" x="316.5" y="37" width="42.5" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -45,14 +50,11 @@
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CityName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iK-Xr-KIl">
                                             <rect key="frame" x="16" y="34" width="84" height="21"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="277" id="Zsk-d4-XJJ"/>
-                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p2v-X6-dEi">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p2v-X6-dEi">
                                             <rect key="frame" x="16" y="63" width="36" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -65,6 +67,7 @@
                                         <constraint firstItem="bpr-3C-2Fv" firstAttribute="trailing" secondItem="HAa-Ot-8Gi" secondAttribute="trailingMargin" id="Kuf-HS-Wg5"/>
                                         <constraint firstItem="bpr-3C-2Fv" firstAttribute="centerY" secondItem="HAa-Ot-8Gi" secondAttribute="centerY" id="Qy0-qa-jOW"/>
                                         <constraint firstItem="7iK-Xr-KIl" firstAttribute="centerY" secondItem="HAa-Ot-8Gi" secondAttribute="centerY" id="lGJ-fb-ZAo"/>
+                                        <constraint firstItem="p2v-X6-dEi" firstAttribute="leading" secondItem="HAa-Ot-8Gi" secondAttribute="leadingMargin" id="lGk-e5-Fs2"/>
                                         <constraint firstItem="7iK-Xr-KIl" firstAttribute="leading" secondItem="HAa-Ot-8Gi" secondAttribute="leadingMargin" id="mY6-iX-6h9"/>
                                         <constraint firstItem="Aga-j8-KNl" firstAttribute="centerX" secondItem="HAa-Ot-8Gi" secondAttribute="centerX" id="w1W-hW-G7h"/>
                                     </constraints>
@@ -97,12 +100,15 @@
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <connections>
+                        <outlet property="unitButton" destination="YCu-f0-aNZ" id="WzH-8p-j2x"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ujg-Vn-8Zb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-468" y="133.5832083958021"/>
         </scene>
-        <!--New Meal-->
+        <!--City-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="CityViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -134,16 +140,29 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WF5-fO-2A2">
+                                <rect key="frame" x="16" y="452" width="343" height="110"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9cy-9K-rhV" customClass="HourlyView" customModule="WeatherApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="110"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="mOK-eQ-bkS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="4t6-jT-VwU"/>
+                            <constraint firstItem="WF5-fO-2A2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="97N-a8-4KR"/>
+                            <constraint firstItem="WF5-fO-2A2" firstAttribute="centerX" secondItem="mOK-eQ-bkS" secondAttribute="centerX" id="Grb-af-qsT"/>
                             <constraint firstAttribute="trailing" secondItem="mOK-eQ-bkS" secondAttribute="trailing" id="RlG-b9-RNQ"/>
+                            <constraint firstItem="WF5-fO-2A2" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="388" id="qYh-vI-2eU"/>
                             <constraint firstItem="mOK-eQ-bkS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="rsc-tz-XCb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WF5-fO-2A2" secondAttribute="bottom" constant="105" id="zm7-Ym-oL9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="New Meal" id="5cp-7D-CGh">
+                    <navigationItem key="navigationItem" title="City" id="5cp-7D-CGh">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="jV7-V4-9jS">
                             <connections>
                                 <action selector="cancel:" destination="BYZ-38-t0r" id="OCo-xa-URu"/>
@@ -170,7 +189,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="934" y="134"/>
+            <point key="canvasLocation" x="933.60000000000002" y="133.5832083958021"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jxp-tk-F2R">

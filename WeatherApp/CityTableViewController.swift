@@ -16,6 +16,7 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
     var meals = [Meal]()
     let manager = CLLocationManager()
     
+    @IBOutlet weak var unitButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,6 +27,8 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: handleResult)
         Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: handleResult)
 //        tableView.reloadData()
+        
+        unitButton.title = Model.metric ? "℃" : "℉"
         
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
@@ -78,8 +81,8 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         if Model.cityName == city.name {
             cell.backgroundColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 0.8)
             cityName += " - Current Location"
-        } else if indexPath.row % 2 == 0{
-            cell.backgroundColor = UIColor.white
+//        } else if indexPath.row % 2 == 0{
+//            cell.backgroundColor = UIColor.white
         } else {
             cell.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         }
