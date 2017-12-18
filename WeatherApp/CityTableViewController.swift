@@ -9,12 +9,12 @@ import UIKit
 import GooglePlaces
 import os.log
 
-class CityTableViewController: UITableViewController {
+class CityTableViewController: UITableViewController, CLLocationManagerDelegate {
     
     // MARK: Properties
     
     var meals = [Meal]()
-    let cities = Model.shared.cities
+    let manager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +26,11 @@ class CityTableViewController: UITableViewController {
         Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: tableView.reloadData)
         Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: tableView.reloadData)
 //        tableView.reloadData()
+        
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,11 +62,18 @@ class CityTableViewController: UITableViewController {
         
         // Fetches the appropriate meal for the data source layout.
         let city = Model.shared.cities[indexPath.row]
-        
-        cell.nameLabel.text = city.name
-        if let timeZone = city.timeZone {
-            cell.nameLabel.text = "\(timeZone)" + city.name
+        var cityName = city.name
+        print("Model: \(Model.cityName), List: \(city.name)")
+        if Model.cityName == city.name {
+            cell.backgroundColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 0.8)
+            cityName += " - Current Location"
+        } else {
+            cell.backgroundColor = UIColor.white
         }
+        if let timeZone = city.timeZone {
+            cityName = "\(timeZone)" + cityName
+        }
+        cell.nameLabel.text = cityName
         if let current = city.current {
             cell.iconImageView.image = UIImage(named: current.icon)
             cell.tempLabel.text = "\(Model.temp(current.temp))"
@@ -161,6 +173,13 @@ class CityTableViewController: UITableViewController {
             // Save the meals.
 //            saveMeals()
         }
+    }
+
+    // MARK: LocationManagerDelegate
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations[0]
+        Model.updateLocation(location, completion: tableView.reloadData)
+        
     }
     
     // MARK: Private Methods

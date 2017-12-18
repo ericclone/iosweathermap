@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Contacts // for getting postalAddress from CLPlacemark
 import os.log
 
 class Model {
@@ -19,13 +20,18 @@ class Model {
     
     
     static let shared = Model()
+    
+    static var cityName: String = ""
+    
     static var metric: Bool = false {
         didSet {
             UserDefaults.standard.set(metric, forKey: "metric")
         }
     }
-    private init() {}
+    
     var cities: [City] = [City]()
+    
+    private init() {}
     
     class func addCity(name: String, lat: Double, lon: Double, whenDone callback: @escaping () -> ()){
         let results = shared.cities.filter {$0.name == name}
@@ -57,6 +63,7 @@ class Model {
                 print("before ", location, cityIndex, city.name, city.lat, city.lon, placemarks?.count)
                 let firstLocation = placemarks?[0]
                 let timeZone = firstLocation?.timeZone
+                print(firstLocation?.postalAddress) 
                 shared.cities[cityIndex].timeZone = timeZone
                 print("after ", location, cityIndex, city.name, city.lat, city.lon, timeZone)
                 DispatchQueue.main.async {
@@ -86,15 +93,17 @@ class Model {
                     let weather = weatherList![0]
                     let main = weather["main"] as! String
                     let icon = weather["icon"] as! String
+                    let time = json!["dt"] as! TimeInterval
                     
                     let temperatures = json!["main"] as? [String: Any]
                     let low = temperatures!["temp_min"] as! Double
                     let high = temperatures!["temp_max"] as! Double
                     let temp = temperatures!["temp"] as! Double
                     
-                    let currentWeather = Weather(temp: temp, high: high, low: low, main: main, icon: icon, timeComponents: [])
+                    let currentWeather = Weather(temp: temp, high: high, low: low, main: main, icon: icon, time: time, timeComponents: [])
                     print(currentWeather!)
                     shared.cities[cityIndex].current = currentWeather
+                    shared.cities[cityIndex].lastRealtime = Date().timeIntervalSince1970
                     DispatchQueue.main.async {
                         callback()
                     }
@@ -112,6 +121,21 @@ class Model {
     
     class func updateForecast(cityIndex: Int, force: Bool = false, callback: @escaping () -> ()) {
         
+    }
+    
+    class func updateLocation(_ location: CLLocation, completion callback: @escaping () -> ()) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+            if error == nil {
+                let firstLocation = placemarks?[0]
+                if let cityName = firstLocation?.postalAddress?.city {
+                    Model.cityName = cityName
+                }
+                DispatchQueue.main.async {
+                    callback()
+                }
+            }
+        })
     }
     
     func updateAll() {
