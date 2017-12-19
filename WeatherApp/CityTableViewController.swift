@@ -142,20 +142,21 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         case "AddItem":
             os_log("Adding a new meal.", log:OSLog.default, type: .debug)
         case "ShowDetail":
-            guard let mealDetailViewController = segue.destination as? CityViewController else {
+            guard let cityDetailViewController = segue.destination as? CityViewController else {
+                print("Unexpected destination: \(segue.destination)")
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             
-            guard let selectedMealCell = sender as? CityTableViewCell else {
+            guard let selectedCityCell = sender as? CityTableViewCell else {
                 fatalError("Unexpected sender: \(sender ?? "nil - nil")")
             }
             
-            guard let indexPath = tableView.indexPath(for: selectedMealCell) else {
+            guard let indexPath = tableView.indexPath(for: selectedCityCell) else {
                 fatalError("The selected cell is not being displayed by the table")
             }
             
-            let selectedMeal = meals[indexPath.row]
-            mealDetailViewController.meal = selectedMeal
+            let selectedCity = Model.shared.cities[indexPath.row]
+            cityDetailViewController.city = selectedCity
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier ?? "nil - nil")")
         }
@@ -176,26 +177,7 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         sender.title = Model.metric ? "℃" : "℉"
         tableView.reloadData()
     }
-    @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
-        
-        if let sourceViewController = sender.source as? CityViewController, let meal = sourceViewController.meal {
-            if let selectedIndexPath = tableView.indexPathForSelectedRow {
-                meals[selectedIndexPath.row] = meal
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
-            }
-            else {
-            
-                // Add a new meal.
-                let newIndexPath = IndexPath(row: meals.count, section: 0)
-                meals.append(meal)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
-            }
-            
-            // Save the meals.
-//            saveMeals()
-        }
-    }
-
+    
     // MARK: LocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]

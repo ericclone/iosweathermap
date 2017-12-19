@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -77,7 +76,7 @@
                                     <outlet property="nameLabel" destination="7iK-Xr-KIl" id="gVc-Qo-LSi"/>
                                     <outlet property="tempLabel" destination="bpr-3C-2Fv" id="nKz-vf-LAI"/>
                                     <outlet property="timeLabel" destination="p2v-X6-dEi" id="yFt-f9-RiF"/>
-                                    <segue destination="BYZ-38-t0r" kind="show" identifier="ShowDetail" id="cvd-x0-Fhg"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="ShowDetail" id="eFk-ef-uQz"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -117,28 +116,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mOK-eQ-bkS">
-                                <rect key="frame" x="0.0" y="40" width="375" height="416"/>
-                                <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter meal name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f2r-ea-i94">
-                                        <rect key="frame" x="123" y="0.0" width="129" height="30"/>
-                                        <nil key="textColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
-                                    </textField>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="320" placeholderIntrinsicHeight="320" image="defaultPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="p2h-dq-b7e">
-                                        <rect key="frame" x="27.5" y="38" width="320" height="320"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="p2h-dq-b7e" secondAttribute="height" multiplier="1:1" id="WTO-t5-SFw"/>
-                                        </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="bvz-l5-uGM" appends="YES" id="iqn-su-aoQ"/>
-                                        </connections>
-                                    </imageView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="6my-Lb-Dmv" customClass="RatingControl" customModule="WeatherApp" customModuleProvider="target">
-                                        <rect key="frame" x="62" y="366" width="251" height="50"/>
-                                    </stackView>
-                                </subviews>
+                                <rect key="frame" x="0.0" y="84" width="375" height="30"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WF5-fO-2A2">
                                 <rect key="frame" x="16" y="452" width="343" height="110"/>
@@ -162,27 +140,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="City" id="5cp-7D-CGh">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="jV7-V4-9jS">
-                            <connections>
-                                <action selector="cancel:" destination="BYZ-38-t0r" id="OCo-xa-URu"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="CqL-aP-9WL">
-                            <connections>
-                                <segue destination="LFP-3h-9fb" kind="unwind" unwindAction="unwindToMealListWithSender:" id="V5W-C1-R4h"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="nameTextField" destination="f2r-ea-i94" id="CDQ-lr-KLo"/>
-                        <outlet property="photoImageView" destination="p2h-dq-b7e" id="VIr-GI-k4u"/>
-                        <outlet property="ratingControl" destination="6my-Lb-Dmv" id="Xu0-Cv-8TN"/>
-                        <outlet property="saveButton" destination="CqL-aP-9WL" id="Ywi-jy-TVC"/>
-                    </connections>
+                    <navigationItem key="navigationItem" title="City" id="5cp-7D-CGh"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <exit id="LFP-3h-9fb" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="bvz-l5-uGM">
                     <connections>
                         <action selector="selectImageFromPhotoLibrary:" destination="BYZ-38-t0r" id="aas-rK-MkL"/>
@@ -209,29 +169,5 @@
             </objects>
             <point key="canvasLocation" x="-1226" y="134"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="8tG-LM-i6K">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uDc-bA-S1a" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6UX-Ij-duh">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="HTw-2M-hQi"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="UyC-Dq-fVp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="230" y="545"/>
-        </scene>
     </scenes>
-    <resources>
-        <image name="defaultPhoto" width="540" height="540"/>
-    </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="cvd-x0-Fhg"/>
-    </inferredMetricsTieBreakers>
 </document>
