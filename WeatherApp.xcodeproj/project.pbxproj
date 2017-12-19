@@ -10,6 +10,7 @@
 		22F71E3F202C1E631C1D80E9 /* libPods-WeatherApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5885076BA9840DD5BE115E /* libPods-WeatherApp.a */; };
 		D434A3551FE8E2EA007BED03 /* DailyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D434A3541FE8E2EA007BED03 /* DailyTableViewCell.swift */; };
 		D435363D1FE4EBFB00E49975 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D435363C1FE4EBFB00E49975 /* Model.swift */; };
+		D4355CAE1FE9075900B23F65 /* DailyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4355CAD1FE9075900B23F65 /* DailyTableViewController.swift */; };
 		D44178151FDD0C15006682F7 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44178141FDD0C15006682F7 /* Weather.swift */; };
 		D44178171FDE82A4006682F7 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44178161FDE82A4006682F7 /* City.swift */; };
 		D47E13261FE767E100865E41 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = D47E13251FE767E100865E41 /* View.xib */; };
@@ -42,6 +43,7 @@
 		CC5885076BA9840DD5BE115E /* libPods-WeatherApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WeatherApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D434A3541FE8E2EA007BED03 /* DailyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTableViewCell.swift; sourceTree = "<group>"; };
 		D435363C1FE4EBFB00E49975 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		D4355CAD1FE9075900B23F65 /* DailyTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTableViewController.swift; sourceTree = "<group>"; };
 		D44178141FDD0C15006682F7 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		D44178161FDE82A4006682F7 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		D47E13251FE767E100865E41 /* View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				D487E5C11FB439CF00ECF538 /* AppDelegate.swift */,
 				D487E5C31FB439CF00ECF538 /* CityViewController.swift */,
 				D434A3541FE8E2EA007BED03 /* DailyTableViewCell.swift */,
+				D4355CAD1FE9075900B23F65 /* DailyTableViewController.swift */,
 				D47E13271FE78A6200865E41 /* HourlyViewController.swift */,
 				D49224F21FE794D70048D944 /* HourlyView.swift */,
 				D487E5E11FB6EFEC00ECF538 /* RatingControl.swift */,
@@ -317,6 +320,7 @@
 			files = (
 				D435363D1FE4EBFB00E49975 /* Model.swift in Sources */,
 				D487E5E41FB7121B00ECF538 /* Meal.swift in Sources */,
+				D4355CAE1FE9075900B23F65 /* DailyTableViewController.swift in Sources */,
 				D487E5C41FB439CF00ECF538 /* CityViewController.swift in Sources */,
 				D487E5E21FB6EFEC00ECF538 /* RatingControl.swift in Sources */,
 				D487E5C21FB439CF00ECF538 /* AppDelegate.swift in Sources */,
