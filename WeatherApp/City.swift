@@ -13,8 +13,8 @@ class City: NSObject, NSCoding {
     var lon: Double = 0.0
     var timeZone: TimeZone?
     var current: Weather?
-    var hourly: [Weather]?
-    var daily: [Weather]?
+    var hourly: [Weather] = []
+    var daily: [Weather] = []
     var lastRealtime: TimeInterval = 0.0
     var lastForecast: TimeInterval = 0.0
     
@@ -33,7 +33,7 @@ class City: NSObject, NSCoding {
     // MARK: Initialization
     override init() {}
     
-    init(name: String, lat: Double, lon: Double, timeZone: TimeZone?, current: Weather?, hourly: [Weather]?, daily: [Weather]?, lastRealTime: TimeInterval?, lastForecast: TimeInterval?) {
+    init(name: String, lat: Double, lon: Double, timeZone: TimeZone?, current: Weather?, hourly: [Weather], daily: [Weather], lastRealTime: TimeInterval?, lastForecast: TimeInterval?) {
         self.name = name
         self.lat = lat
         self.lon = lon
@@ -62,8 +62,8 @@ class City: NSObject, NSCoding {
         let lon = aDecoder.decodeDouble(forKey: Key.lon)
         let timeZone = aDecoder.decodeObject(forKey: Key.timeZone) as? TimeZone
         let current = aDecoder.decodeObject(forKey: Key.current) as? Weather
-        let hourly = aDecoder.decodeObject(forKey: Key.hourly) as? [Weather]
-        let daily = aDecoder.decodeObject(forKey: Key.daily) as? [Weather]
+        let hourly = aDecoder.decodeObject(forKey: Key.hourly) as! [Weather]
+        let daily = aDecoder.decodeObject(forKey: Key.daily) as! [Weather]
         let lastRealTime = aDecoder.decodeObject(forKey: Key.lastRealTime) as? TimeInterval
         let lastForecast = aDecoder.decodeObject(forKey: Key.lastForecast) as? TimeInterval
         self.init(name: name!, lat: lat, lon: lon, timeZone: timeZone, current: current, hourly: hourly, daily: daily, lastRealTime: lastRealTime, lastForecast: lastForecast)

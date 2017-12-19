@@ -80,19 +80,20 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         print("Model: \(Model.cityName), List: \(city.name)")
         if Model.cityName == city.name {
             cell.backgroundColor = UIColor(red: 0.8, green: 1.0, blue: 0.8, alpha: 0.8)
-            cityName += " - Current Location"
+            cityName += " 📍"
 //        } else if indexPath.row % 2 == 0{
 //            cell.backgroundColor = UIColor.white
         } else {
             cell.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
         }
-        if let timeZone = city.timeZone {
-            cityName = "\(timeZone)" + cityName
-        }
+
         cell.nameLabel.text = cityName
         if let current = city.current {
             cell.iconImageView.image = UIImage(named: current.icon)
             cell.tempLabel.text = "\(Model.temp(current.temp))"
+            
+            let timeComponents = current.timeComponents
+            cell.timeLabel.text = "\(timeComponents[4]):\(timeComponents[5]) \(timeComponents[6])"
         }
 
         return cell
@@ -139,11 +140,8 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         super.prepare(for: segue, sender: sender)
         
         switch(segue.identifier ?? "") {
-        case "AddItem":
-            os_log("Adding a new meal.", log:OSLog.default, type: .debug)
         case "ShowDetail":
             guard let cityDetailViewController = segue.destination as? CityViewController else {
-                print("Unexpected destination: \(segue.destination)")
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             
@@ -155,8 +153,8 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
                 fatalError("The selected cell is not being displayed by the table")
             }
             
-            let selectedCity = Model.shared.cities[indexPath.row]
-            cityDetailViewController.city = selectedCity
+
+            cityDetailViewController.cityIndex = indexPath.row
         default:
             fatalError("Unexpected Segue Identifier: \(segue.identifier ?? "nil - nil")")
         }

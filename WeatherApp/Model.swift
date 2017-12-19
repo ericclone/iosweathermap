@@ -83,7 +83,7 @@ class Model {
         if cityIndex >= shared.cities.count {
             return
         }
-        print("updating weather")
+//        print("updating weather")
         let cityName = shared.cities[cityIndex].name
         let escapedName = cityName.replacingOccurrences(of: "\'", with: "")
 
@@ -120,12 +120,14 @@ class Model {
                     let icon = weather["icon"] as! String
                     let time = json!["dt"] as! TimeInterval
                     
+                    let timeComponents = intervalToComponents(time, shared.cities[cityIndex].timeZone!)
+                    
                     let temperatures = json!["main"] as? [String: Any]
                     let low = temperatures!["temp_min"] as! Double
                     let high = temperatures!["temp_max"] as! Double
                     let temp = temperatures!["temp"] as! Double
                     
-                    let currentWeather = Weather(temp: temp, high: high, low: low, main: main, icon: icon, time: time, timeComponents: [])
+                    let currentWeather = Weather(temp: temp, high: high, low: low, main: main, icon: icon, time: time, timeComponents: timeComponents)
                     print(currentWeather!)
                     shared.cities[cityIndex].current = currentWeather
                     shared.cities[cityIndex].lastRealtime = Date().timeIntervalSince1970
@@ -137,9 +139,6 @@ class Model {
                 }
             }
         }
-        if errorMsg != "" {
-            print(errorMsg)
-        }
         task.resume()
     }
     
@@ -147,6 +146,79 @@ class Model {
         if (cityIndex >= shared.cities.count) {
             return
         }
+        let cityName = shared.cities[cityIndex].name
+        let escapedName = cityName.replacingOccurrences(of: "\'", with: "")
+        
+        let urlString = String(format:Model.forecastURL, escapedName)
+        let escapedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let url = URL(string: escapedUrlString!)
+        var errorMsg = ""
+        let task = URLSession.shared.dataTask(with: url!) {
+            (data, response, error) in
+            print("received response")
+            if error != nil {
+                print(error!)
+                errorMsg = error!.localizedDescription
+            } else {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                    guard let statusCode = Int(json!["cod"] as! String), statusCode == 200 else {
+                        let statusCode = Int(json!["cod"] as! String)
+                        print("removing city \(cityName)")
+                        shared.cities = shared.cities.filter {$0.name != cityName}
+                        for oneCity in shared.cities {
+                            print("left: \(oneCity.name)")
+                        }
+                        DispatchQueue.main.async {
+                            callback(false, "OpenWeatherMap returned \(statusCode!): \(json!["message"] as! String)")
+                        }
+                        return
+                    }
+                    
+                    shared.cities[cityIndex].hourly.removeAll()
+                    shared.cities[cityIndex].daily.removeAll()
+                    
+                    let timeZone = shared.cities[cityIndex].timeZone!
+                    
+                    let currentTime = Date().timeIntervalSince1970
+                    let currentTimeComponents = intervalToComponents(currentTime, timeZone)
+                    
+                    let forecastList = json!["list"] as? [[String:Any]]
+                    for (i, forecast) in forecastList!.enumerated() {
+                        
+                        let weatherList = forecast["weather"] as? [[String: Any]]
+                        let weather = weatherList![0]
+                        let main = weather["main"] as! String
+                        let icon = weather["icon"] as! String
+                        let time = forecast["dt"] as! TimeInterval
+                        
+                        let timeComponents = intervalToComponents(time, timeZone)
+                        
+                        let temperatures = forecast["main"] as? [String: Any]
+                        let low = temperatures!["temp_min"] as! Double
+                        let high = temperatures!["temp_max"] as! Double
+                        let temp = temperatures!["temp"] as! Double
+                        
+                        if i < 8 {
+                            shared.cities[cityIndex].hourly.append(Weather(temp: temp, high: high, low: low, main: main, icon: icon, time: time, timeComponents: timeComponents)!)
+                        }
+                        
+                        if timeComponents[2] != currentTimeComponents[2] && Int(timeComponents[7])! / 3 == 4 {
+                            shared.cities[cityIndex].daily.append(Weather(temp: temp, high: high, low: low, main: main, icon: icon, time: time, timeComponents: timeComponents)!)
+                        }
+                    }
+                    
+                    
+                    shared.cities[cityIndex].lastForecast = Date().timeIntervalSince1970
+                    DispatchQueue.main.async {
+                        callback(true, "")
+                    }
+                } catch let error as Error {
+                    errorMsg = error.localizedDescription
+                }
+            }
+        }
+        task.resume()
     }
     
     class func updateLocation(_ location: CLLocation, completion callback: @escaping (Bool, String) -> ()) {
@@ -191,5 +263,14 @@ class Model {
         } else {
             return Int((kelvin - 273.15) * 1.8 + 32)
         }
+    }
+    
+    class func intervalToComponents(_ time: TimeInterval, _ timeZone: TimeZone) -> [String] {
+        let date = Date(timeIntervalSince1970: time)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timeZone
+        dateFormatter.dateFormat = "YYYY-MMM-dd-EEEE-h-mm-a-H"
+        let timeComponents = dateFormatter.string(from: date).components(separatedBy: "-")
+        return timeComponents
     }
 }

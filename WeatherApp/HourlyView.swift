@@ -33,11 +33,7 @@ import UIKit
         super.init(coder: coder)
         updateUI()
     }
-    init(weather: Weather) {
-        super.init()
-        self.weather = weather
-        updateUI()
-    }
+
     
     // MARK: Private Methods
     func updateUI() {
