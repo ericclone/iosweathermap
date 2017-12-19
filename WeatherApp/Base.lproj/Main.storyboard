@@ -264,7 +264,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="City" id="5cp-7D-CGh"/>
                     <connections>
+                        <outlet property="currentLabel" destination="GrZ-wG-0xh" id="j9d-ww-woh"/>
                         <outlet property="dailyTableView" destination="w9y-b7-M2m" id="x5Y-9H-4wS"/>
+                        <outlet property="dayOfWeekLabel" destination="FYa-de-dOH" id="ERu-3Q-5db"/>
+                        <outlet property="highLabel" destination="yw1-x9-ANZ" id="c3Y-L1-oFj"/>
+                        <outlet property="lowLabel" destination="ikr-5D-nyc" id="orq-BZ-1jc"/>
+                        <outlet property="tempLabel" destination="VFO-D9-3Sd" id="iTE-YW-VZf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
