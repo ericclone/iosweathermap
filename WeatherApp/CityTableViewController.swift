@@ -14,7 +14,7 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
     // MARK: Properties
     
     var meals = [Meal]()
-    let manager = CLLocationManager()
+    let locationManager = CLLocationManager()
     
     @IBOutlet weak var unitButton: UIBarButtonItem!
     override func viewDidLoad() {
@@ -23,17 +23,20 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
 
-        Model.addCity(name: "San Jose", lat: 37.3382, lon: -121.8863, whenDone: handleResult)
-        Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: handleResult)
-        Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: handleResult)
+//        Model.addCity(name: "San Jose", lat: 37.3382, lon: -121.8863, whenDone: handleResult)
+//        Model.addCity(name: "San Francisco", lat: 37.7749, lon: -122.4194, whenDone: handleResult)
+//        Model.addCity(name: "Beijing", lat: 39.9042, lon: 116.4074, whenDone: handleResult)
 //        tableView.reloadData()
+
+        Model.load()
+        updateAll()
         
         unitButton.title = Model.metric ? "℃" : "℉"
         
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     }
 
     override func didReceiveMemoryWarning() {
@@ -110,11 +113,9 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         if editingStyle == .delete {
             // Delete the row from the data source
             Model.shared.cities.remove(at: indexPath.row)
-//            saveMeals()
+            Model.save()
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
 
     /*
@@ -183,41 +184,13 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
         
     }
     
-    // MARK: Private Methods
-    
-    private func loadSampleMeals() {
-        let photo1 = UIImage(named: "meal1")
-        let photo2 = UIImage(named: "meal2")
-        let photo3 = UIImage(named: "meal3")
-        
-        guard let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4) else {
-            fatalError("Unable to instantiate meal1")
+    private func updateAll() {
+        for i in 1..<Model.shared.cities.count {
+            Model.updateTimeZone(cityIndex: i, callback: handleResult)
+            Model.updateWeather(cityIndex: i, callback: handleResult)
+            Model.updateForecast(cityIndex: i, callback: handleResult)
         }
-
-        guard let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5) else {
-            fatalError("Unable to instantiate meal2")
-        }
-
-        guard let meal3 = Meal(name: "Pasta with Meatballs", photo: photo3, rating: 3) else {
-            fatalError("Unable to instantiate meal3")
-        }
-
-        meals += [meal1, meal2, meal3]
     }
-    
-//    private func saveMeals() {
-//        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
-//        if isSuccessfulSave {
-//            os_log("Meals successfully saved.", log: OSLog.default, type: .debug)
-//        }
-//        else {
-//            os_log("Failed to save meals...", log: OSLog.default, type: .error)
-//        }
-//    }
-//
-//    private func loadMeals() -> [Meal]? {
-//        return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
-//    }
 }
 
 

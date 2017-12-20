@@ -48,6 +48,7 @@ class Model {
         print(lat, lon)
         let index = shared.cities.count
         shared.cities.append(city)
+        save()
         
         updateTimeZone(cityIndex: index, callback: callback)
         updateWeather(cityIndex: index, callback: callback)
@@ -104,6 +105,7 @@ class Model {
                         let statusCode = Int(json!["cod"] as! String)
                         print("removing city \(cityName)")
                         shared.cities = shared.cities.filter {$0.name != cityName}
+                        save()
                         for oneCity in shared.cities {
                             print("left: \(oneCity.name)")
                         }
@@ -169,6 +171,7 @@ class Model {
                         let statusCode = Int(json!["cod"] as! String)
                         print("removing city \(cityName)")
                         shared.cities = shared.cities.filter {$0.name != cityName}
+                        save()
                         for oneCity in shared.cities {
                             print("left: \(oneCity.name)")
                         }
@@ -239,13 +242,8 @@ class Model {
         })
     }
     
-    func updateAll() {
-        let timeString = String(format: "The current time is %02d:%02d", 10, 4)
-        print(timeString)
-    }
-    
-    func save() {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(cities, toFile: Model.ArchiveURL.path)
+    class func save() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(shared.cities, toFile: Model.ArchiveURL.path)
         if isSuccessfulSave {
             os_log("Cities successfully saved.", log: OSLog.default, type: .debug)
         }
@@ -254,9 +252,9 @@ class Model {
         }
     }
     
-    func load() {
+    class func load() {
         if let cities = NSKeyedUnarchiver.unarchiveObject(withFile: Model.ArchiveURL.path) as? [City] {
-            self.cities = cities
+            shared.cities = cities
         }
     }
     
@@ -268,7 +266,7 @@ class Model {
         }
     }
     
-    class func intervalToComponents(_ time: TimeInterval, _ timeZone: TimeZone) -> [String] {
+    private class func intervalToComponents(_ time: TimeInterval, _ timeZone: TimeZone) -> [String] {
         let date = Date(timeIntervalSince1970: time)
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone

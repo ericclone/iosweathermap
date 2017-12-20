@@ -20,6 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location service is needed to determine current city.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allows you to add photos to your meals.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,9 +45,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allows you to add photos to your meals.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location service is needed to determine current city.</string>
 </dict>
 </plist>

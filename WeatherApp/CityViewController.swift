@@ -13,7 +13,6 @@ class CityViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: Properties
 
     var cityIndex: Int?
-    @IBOutlet weak var dailyTableView: UITableView!
     @IBOutlet weak var currentLabel: UILabel!
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -21,8 +20,11 @@ class CityViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var highLabel: UILabel!
     @IBOutlet weak var lowLabel: UILabel!
     @IBOutlet weak var hourlyStackView: UIStackView!
+    @IBOutlet weak var dailyStackView: UIStackView!
+    @IBOutlet weak var unitButton: UIBarButtonItem!
     
     var hourlyViews: [UIView] = []
+    var dailyViews: [UIView] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,15 +41,13 @@ class CityViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.view.addGestureRecognizer(swipeRight)
         self.view.addGestureRecognizer(swipeLeft)
-        
-        dailyTableView.dataSource = self
-        dailyTableView.delegate = self
+
         
         updateUI()
     }
     
     private func updateUI() {
-
+        unitButton.title = Model.metric ? "℃" : "℉"
         
         // Set up views if editing an existing Meal.
         if let cityIndex = cityIndex {
@@ -69,6 +69,7 @@ class CityViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 dayOfWeekLabel.text = weather.timeComponents[3]
             }
             populateHourly(city.hourly)
+            populateDaily(city.daily)
         }
     }
     
@@ -123,7 +124,78 @@ class CityViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         return stack
     }
+
     
+    private func populateDaily(_ weatherList: [Weather]) {
+        for view in dailyViews {
+            dailyStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        
+        for weather in weatherList {
+            let view = createDailyView(weather.timeComponents, weather.icon, Model.temp(weather.high), Model.temp(weather.low))
+            dailyStackView.addArrangedSubview(view)
+            dailyViews.append(view)
+        }
+        print("\(dailyStackView.arrangedSubviews.count) view created for stack view")
+    }
+    
+    private func createDailyView(_ timeComponents: [String], _ icon: String, _ high: String, _ low: String) -> UIView {
+        let dailyView = UIView()
+        dailyView.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        dailyView.widthAnchor.constraint(equalToConstant: dailyStackView.intrinsicContentSize.width).isActive = true
+        
+        let timeLabel = UILabel()
+        timeLabel.text = timeComponents[3]
+        timeLabel.textAlignment = .left
+        timeLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        timeLabel.textColor = UIColor.white
+        timeLabel.sizeToFit()
+        
+        dailyView.addSubview(timeLabel)
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.leadingAnchor.constraint(equalTo: timeLabel.superview!.leadingAnchor, constant: 8).isActive = true
+        timeLabel.centerYAnchor.constraint(equalTo: timeLabel.superview!.centerYAnchor).isActive = true
+        
+        let iconImageView = UIImageView()
+        iconImageView.contentMode = .scaleAspectFill
+        iconImageView.image = UIImage(named: icon)
+
+        dailyView.addSubview(iconImageView)
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        iconImageView.heightAnchor.constraint(equalToConstant: 96).isActive = true
+        iconImageView.widthAnchor.constraint(equalToConstant: 96).isActive = true
+        iconImageView.centerXAnchor.constraint(equalTo: iconImageView.superview!.centerXAnchor).isActive = true
+        iconImageView.centerYAnchor.constraint(equalTo: iconImageView.superview!.centerYAnchor).isActive = true
+        iconImageView.sizeToFit()
+        
+        let lowLabel = UILabel()
+        lowLabel.text = low
+        lowLabel.textAlignment = .right
+        lowLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        lowLabel.textColor = UIColor.blue
+        lowLabel.sizeToFit()
+        
+        dailyView.addSubview(lowLabel)
+        lowLabel.translatesAutoresizingMaskIntoConstraints = false
+        lowLabel.trailingAnchor.constraint(equalTo: lowLabel.superview!.trailingAnchor, constant: -8).isActive = true
+        lowLabel.centerYAnchor.constraint(equalTo: lowLabel.superview!.centerYAnchor).isActive = true
+        
+        let highLabel = UILabel()
+        highLabel.text = high
+        highLabel.textAlignment = .right
+        highLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        highLabel.textColor = UIColor.red
+        highLabel.sizeToFit()
+        
+        dailyView.addSubview(highLabel)
+        highLabel.translatesAutoresizingMaskIntoConstraints = false
+        highLabel.trailingAnchor.constraint(equalTo: lowLabel.trailingAnchor, constant: -32).isActive = true
+        highLabel.centerYAnchor.constraint(equalTo: highLabel.superview!.centerYAnchor).isActive = true
+        
+        return dailyView
+    }
+
     func handleUpdateResult(_ success: Bool, _ message: String) {
         updateUI()
         if !success {
