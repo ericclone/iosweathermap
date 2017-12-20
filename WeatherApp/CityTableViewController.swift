@@ -1,4 +1,4 @@
-//
+
 //  MealTableViewController.swift
 //  WeatherApp
 //
@@ -185,7 +185,7 @@ class CityTableViewController: UITableViewController, CLLocationManagerDelegate 
     }
     
     private func updateAll() {
-        for i in 1..<Model.shared.cities.count {
+        for i in 0..<Model.shared.cities.count {
             Model.updateTimeZone(cityIndex: i, callback: handleResult)
             Model.updateWeather(cityIndex: i, callback: handleResult)
             Model.updateForecast(cityIndex: i, callback: handleResult)
