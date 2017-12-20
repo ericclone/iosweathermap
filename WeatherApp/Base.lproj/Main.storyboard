@@ -10,6 +10,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -117,7 +118,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mOK-eQ-bkS">
-                                <rect key="frame" x="0.0" y="84" width="375" height="584.5"/>
+                                <rect key="frame" x="0.0" y="84" width="375" height="746"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clear" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GrZ-wG-0xh">
                                         <rect key="frame" x="151" y="0.0" width="73" height="38.5"/>
@@ -126,13 +127,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="55" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VFO-D9-3Sd">
-                                        <rect key="frame" x="131.5" y="46.5" width="112.5" height="115"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="96"/>
+                                        <rect key="frame" x="145.5" y="46.5" width="84.5" height="86"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="72"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oct 10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wnZ-FU-swV">
+                                        <rect key="frame" x="164" y="140.5" width="47.5" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zsq-JP-5Wa">
-                                        <rect key="frame" x="0.0" y="169.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="168" width="375" height="58"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FYa-de-dOH">
                                                 <rect key="frame" x="8" y="0.0" width="84.5" height="29"/>
@@ -170,20 +177,12 @@
                                             <constraint firstItem="ikr-5D-nyc" firstAttribute="top" secondItem="zsq-JP-5Wa" secondAttribute="top" id="xyM-N0-gKP"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WF5-fO-2A2">
-                                        <rect key="frame" x="16" y="227.5" width="343" height="50"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9cy-9K-rhV" customClass="HourlyView" customModule="WeatherApp" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="50"/>
-                                            </view>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="9cy-9K-rhV" firstAttribute="leading" secondItem="WF5-fO-2A2" secondAttribute="leading" id="Se4-Mh-JUc"/>
-                                            <constraint firstAttribute="trailing" secondItem="9cy-9K-rhV" secondAttribute="trailing" id="TNF-RV-2dN"/>
-                                        </constraints>
+                                    <stackView opaque="NO" contentMode="scaleAspectFill" ambiguous="YES" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="WF5-fO-2A2">
+                                        <rect key="frame" x="16" y="234" width="343" height="205"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="w9y-b7-M2m">
-                                        <rect key="frame" x="0.0" y="285.5" width="375" height="299"/>
+                                        <rect key="frame" x="0.0" y="447" width="375" height="299"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <view key="tableFooterView" contentMode="scaleToFill" misplaced="YES" id="iGy-3f-XGz">
                                             <rect key="frame" x="0.0" y="72" width="375" height="44"/>
@@ -251,6 +250,7 @@
                                     <constraint firstAttribute="trailing" secondItem="w9y-b7-M2m" secondAttribute="trailing" id="NQZ-Oo-qYu"/>
                                     <constraint firstAttribute="bottom" secondItem="w9y-b7-M2m" secondAttribute="bottom" id="PBC-UV-CCb"/>
                                     <constraint firstItem="w9y-b7-M2m" firstAttribute="leading" secondItem="mOK-eQ-bkS" secondAttribute="leading" id="uR6-MJ-MSF"/>
+                                    <constraint firstItem="WF5-fO-2A2" firstAttribute="top" secondItem="zsq-JP-5Wa" secondAttribute="bottom" constant="32" id="wyu-oW-Oj6"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -262,12 +262,20 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="City" id="5cp-7D-CGh"/>
+                    <navigationItem key="navigationItem" title="City" id="5cp-7D-CGh">
+                        <barButtonItem key="rightBarButtonItem" title="℉" id="2qX-Gn-jho">
+                            <connections>
+                                <action selector="switchUnit:" destination="BYZ-38-t0r" id="JYn-Lo-gQA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="currentLabel" destination="GrZ-wG-0xh" id="j9d-ww-woh"/>
                         <outlet property="dailyTableView" destination="w9y-b7-M2m" id="x5Y-9H-4wS"/>
+                        <outlet property="dateLabel" destination="wnZ-FU-swV" id="f8x-EC-UBO"/>
                         <outlet property="dayOfWeekLabel" destination="FYa-de-dOH" id="ERu-3Q-5db"/>
                         <outlet property="highLabel" destination="yw1-x9-ANZ" id="c3Y-L1-oFj"/>
+                        <outlet property="hourlyStackView" destination="WF5-fO-2A2" id="HR6-Jj-xAA"/>
                         <outlet property="lowLabel" destination="ikr-5D-nyc" id="orq-BZ-1jc"/>
                         <outlet property="tempLabel" destination="VFO-D9-3Sd" id="iTE-YW-VZf"/>
                     </connections>

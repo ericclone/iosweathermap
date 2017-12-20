@@ -120,6 +120,9 @@ class Model {
                     let icon = weather["icon"] as! String
                     let time = json!["dt"] as! TimeInterval
                     
+                    while shared.cities[cityIndex].timeZone == nil {
+                        usleep(10000)
+                    }
                     let timeComponents = intervalToComponents(time, shared.cities[cityIndex].timeZone!)
                     
                     let temperatures = json!["main"] as? [String: Any]
@@ -257,11 +260,11 @@ class Model {
         }
     }
     
-    class func temp(_ kelvin: Double) -> Int {
+    class func temp(_ kelvin: Double) -> String {
         if metric {
-            return Int(kelvin - 273.15)
+            return "\(Int(kelvin - 273.15))"
         } else {
-            return Int((kelvin - 273.15) * 1.8 + 32)
+            return "\(Int((kelvin - 273.15) * 1.8 + 32))"
         }
     }
     
