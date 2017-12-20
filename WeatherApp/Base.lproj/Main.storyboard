@@ -186,8 +186,8 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="zsq-JP-5Wa" firstAttribute="leading" secondItem="mOK-eQ-bkS" secondAttribute="leading" id="3ov-aj-RPz"/>
-                                    <constraint firstAttribute="trailing" secondItem="zsq-JP-5Wa" secondAttribute="trailing" id="AhA-mg-EBX"/>
+                                    <constraint firstItem="zsq-JP-5Wa" firstAttribute="leading" secondItem="mOK-eQ-bkS" secondAttribute="leadingMargin" id="3ov-aj-RPz"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="zsq-JP-5Wa" secondAttribute="trailing" id="AhA-mg-EBX"/>
                                     <constraint firstItem="xY7-dC-ICE" firstAttribute="leading" secondItem="mOK-eQ-bkS" secondAttribute="leadingMargin" id="Pu7-fa-reK"/>
                                     <constraint firstItem="xY7-dC-ICE" firstAttribute="bottom" secondItem="mOK-eQ-bkS" secondAttribute="bottomMargin" id="vbE-tY-zHd"/>
                                     <constraint firstItem="WF5-fO-2A2" firstAttribute="top" secondItem="zsq-JP-5Wa" secondAttribute="bottom" constant="32" id="wyu-oW-Oj6"/>

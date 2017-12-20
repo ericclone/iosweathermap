@@ -101,8 +101,8 @@ class CityViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let timeLabel = UILabel()
         timeLabel.text = "\(timeComponents[4]) \(timeComponents[6])"
-        timeLabel.textAlignment = .center
-        timeLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        timeLabel.textAlignment = .justified
+        timeLabel.font = UIFont.preferredFont(forTextStyle: .callout)
         timeLabel.textColor = UIColor.white
         
         let iconImageView = UIImageView()
