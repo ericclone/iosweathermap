@@ -220,6 +220,7 @@
                         <outlet property="hourlyStackView" destination="WF5-fO-2A2" id="HR6-Jj-xAA"/>
                         <outlet property="lowLabel" destination="ikr-5D-nyc" id="orq-BZ-1jc"/>
                         <outlet property="tempLabel" destination="VFO-D9-3Sd" id="iTE-YW-VZf"/>
+                        <outlet property="unitButton" destination="2qX-Gn-jho" id="aY3-7D-Ke9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
